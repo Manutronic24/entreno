@@ -123,6 +123,7 @@ svg{display:block;width:100%;height:auto}
 <script>
 "use strict";
 var START = "2026-11-16";
+var VERSION = 6;
 function E(id,n,m,s,lo,hi,rir,rest,alts,cues){return {id:id,n:n,m:m,s:s,lo:lo,hi:hi,rir:rir,rest:rest,alts:alts,cues:cues};}
 var PROG = {
  lun:{label:"Lun",t:"Torso A y brazos",ex:[
@@ -393,7 +394,7 @@ function viewSemana(){
 function render(){
   var v=ui.view;
   document.querySelectorAll(".nav a").forEach(function(a){if(a.dataset.v===v)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});
-  $("weekline").textContent="Semana "+weekNo(ymd(new Date()))+" del programa · inicio "+shortD(START);
+  $("weekline").textContent="Semana "+weekNo(ymd(new Date()))+" del programa · inicio "+shortD(START)+" · v"+VERSION;
   ({hoy:viewHoy,progreso:viewProgreso,cuerpo:viewCuerpo,semana:viewSemana}[v]||viewHoy)();
 }
 function softRender(){
@@ -482,7 +483,12 @@ $("timerStop").addEventListener("click",function(){clearInterval(tInt);$("timer"
 window.addEventListener("hashchange",route);
 loadLocal();
 route();
-if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}
+if("serviceWorker" in navigator){
+  var hadCtrl=!!navigator.serviceWorker.controller,reloaded=false;
+  /* Cuando llega una version nueva, la app se recarga sola una vez */
+  navigator.serviceWorker.addEventListener("controllerchange",function(){if(hadCtrl&&!reloaded){reloaded=true;location.reload();}});
+  window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(function(r){try{r.update();}catch(e){}}).catch(function(){});});
+}
 </script>
 </body>
 </html>
