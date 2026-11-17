@@ -189,9 +189,9 @@ function apText(e,base){
   return "Aproximación (no se registra): "+t+(base!=null&&base>0?"":" · del peso de tu serie 1");
 }
 function apBase(x,last){var k=x.series[0]&&x.series[0].kg;if(k!=null)return k;return last&&last.sets[0]?last.sets[0].kg:null;}
-var FOTO = {"lun1":"Leverage_Incline_Chest_Press","lun2":"Wide-Grip_Lat_Pulldown","lun3":"Machine_Bench_Press","lun4":"Lying_T-Bar_Row","lun5":"Preacher_Curl","lun6":"Cable_Rope_Overhead_Triceps_Extension","lun7":"Standing_Low-Pulley_Deltoid_Raise","mar1":"Hack_Squat","mar2":"Seated_Leg_Curl","mar3":"Leg_Extensions","mar4":"Standing_Calf_Raises","mar5":"Cable_Crunch","mar6":"Palms-Up_Barbell_Wrist_Curl_Over_A_Bench","mie1":"Standing_One-Arm_Cable_Curl","mie2":"Dip_Machine","mie3":"Cable_Hammer_Curls_-_Rope_Attachment","mie4":"Triceps_Pushdown","mie5":"Side_Lateral_Raise","mie6":"Reverse_Machine_Flyes","mie7":"Reverse_Barbell_Curl","jue1":"Romanian_Deadlift","jue2":"Leg_Press","jue3":"Lying_Leg_Curls","jue4":"Leg_Extensions","jue5":"Calf_Press_On_The_Leg_Press_Machine","jue6":"Ab_Crunch_Machine","jue7":"Seated_Dumbbell_Palms-Down_Wrist_Curl","vie1":"Leverage_Chest_Press","vie2":"Seated_Cable_Rows","vie3":"V-Bar_Pulldown","vie4":"Butterfly","vie5":"EZ-Bar_Skullcrusher","vie6":"EZ-Bar_Curl","vie7":"Standing_Low-Pulley_Deltoid_Raise"};
-/* Ejercicios cuya foto muestra una variante parecida, no la exacta */
-var FOTO_APROX = {lun4:"La foto muestra un remo en T con apoyo; tu máquina puede verse distinta.",mie1:"La foto muestra el curl de frente a la polea. Tú hazlo de espaldas a la polea, con el brazo detrás del torso.",mie5:"La foto muestra la versión con mancuernas (alternativa C). En máquina el recorrido es el mismo.",lun3:"Tu máquina puede verse distinta; el movimiento es el mismo.",vie1:"Tu máquina puede verse distinta; el movimiento es el mismo."};
+var FOTO = {"lun1":["Leverage_Incline_Chest_Press","Smith_Machine_Incline_Bench_Press","Incline_Dumbbell_Press"],"lun2":["Wide-Grip_Lat_Pulldown","Chin-Up","Band_Assisted_Pull-Up"],"lun3":["Machine_Bench_Press","Smith_Machine_Bench_Press","Dumbbell_Bench_Press"],"lun4":["Lying_T-Bar_Row","Seated_Cable_Rows","Dumbbell_Incline_Row"],"lun5":["Preacher_Curl","Machine_Preacher_Curls","One_Arm_Dumbbell_Preacher_Curl"],"lun6":["Cable_Rope_Overhead_Triceps_Extension","Machine_Triceps_Extension","Standing_Dumbbell_Triceps_Extension"],"lun7":["Standing_Low-Pulley_Deltoid_Raise",null,"Side_Lateral_Raise"],"mar1":["Hack_Squat","Leg_Press","Goblet_Squat"],"mar2":["Seated_Leg_Curl","Lying_Leg_Curls","Stiff-Legged_Dumbbell_Deadlift"],"mar3":["Leg_Extensions",null,"Goblet_Squat"],"mar4":["Standing_Calf_Raises","Calf_Press_On_The_Leg_Press_Machine","Standing_Dumbbell_Calf_Raise"],"mar5":["Cable_Crunch","Ab_Crunch_Machine","Weighted_Crunches"],"mar6":["Palms-Up_Barbell_Wrist_Curl_Over_A_Bench","Seated_Two-Arm_Palms-Up_Low-Pulley_Wrist_Curl","Seated_Dumbbell_Palms-Up_Wrist_Curl"],"mie1":["Standing_One-Arm_Cable_Curl","Standing_Biceps_Cable_Curl","Incline_Dumbbell_Curl"],"mie2":["Dip_Machine","Smith_Machine_Close-Grip_Bench_Press","Close-Grip_Barbell_Bench_Press"],"mie3":["Cable_Hammer_Curls_-_Rope_Attachment",null,"Hammer_Curls"],"mie4":["Triceps_Pushdown",null,"Lying_Dumbbell_Tricep_Extension"],"mie5":[null,"Standing_Low-Pulley_Deltoid_Raise","Side_Lateral_Raise"],"mie6":["Reverse_Machine_Flyes","Cable_Rear_Delt_Fly","Reverse_Flyes"],"mie7":["Reverse_Barbell_Curl","Reverse_Cable_Curl","Standing_Dumbbell_Reverse_Curl"],"jue1":["Romanian_Deadlift","Smith_Machine_Stiff-Legged_Deadlift","Stiff-Legged_Dumbbell_Deadlift"],"jue2":["Leg_Press","Hack_Squat","Goblet_Squat"],"jue3":["Lying_Leg_Curls","Seated_Leg_Curl","Ball_Leg_Curl"],"jue4":["Leg_Extensions",null,"Goblet_Squat"],"jue5":["Calf_Press_On_The_Leg_Press_Machine","Standing_Calf_Raises","Standing_Dumbbell_Calf_Raise"],"jue6":["Ab_Crunch_Machine","Cable_Crunch","Hanging_Leg_Raise"],"jue7":["Seated_Dumbbell_Palms-Down_Wrist_Curl",null,"Palms-Down_Wrist_Curl_Over_A_Bench"],"vie1":["Leverage_Chest_Press","Smith_Machine_Bench_Press","Barbell_Bench_Press_-_Medium_Grip"],"vie2":["Seated_Cable_Rows","Lying_T-Bar_Row","One-Arm_Dumbbell_Row"],"vie3":["V-Bar_Pulldown","Underhand_Cable_Pulldowns","Band_Assisted_Pull-Up"],"vie4":["Butterfly","Cable_Crossover","Dumbbell_Flyes"],"vie5":["EZ-Bar_Skullcrusher","Cable_Rope_Overhead_Triceps_Extension","Lying_Dumbbell_Tricep_Extension"],"vie6":["EZ-Bar_Curl","Standing_Biceps_Cable_Curl","Dumbbell_Bicep_Curl"],"vie7":["Standing_Low-Pulley_Deltoid_Raise",null,"Side_Lateral_Raise"]};
+/* Notas cuando la foto no coincide exactamente con la variante */
+var FOTO_NOTA = {"lun3-A":"Tu máquina puede verse distinta; el movimiento es el mismo.","vie1-A":"Tu máquina puede verse distinta; el movimiento es el mismo.","lun4-A":"La foto muestra un remo en T con apoyo; tu máquina puede verse distinta.","lun2-B":"La foto muestra una dominada sin ayuda. En la máquina asistida el movimiento es el mismo.","lun6-B":"La foto muestra una máquina con los brazos al frente. Si puedes, prefiere la polea con barra por encima de la cabeza.","mar1-B":"En la prensa coloca los pies bajos en la plataforma para cargar más el cuádriceps.","mie1-A":"La foto muestra el curl de frente a la polea. Tú hazlo de espaldas a la polea, con el brazo detrás del torso.","mie1-B":"La foto muestra el curl de frente. Tú colócate de espaldas a las poleas, con los brazos detrás del torso.","vie5-B":"Es la misma extensión sobre la cabeza del lunes."};
 var DAYS = ["lun","mar","mie","jue","vie"];
 var ALL_EX = []; DAYS.forEach(function(d){PROG[d].ex.forEach(function(e){ALL_EX.push({d:d,e:e});});});
 var PLANNED = ALL_EX.reduce(function(a,x){return a+x.e.s;},0);
@@ -314,7 +314,7 @@ function viewHoy(){
          '<input type="text" inputmode="numeric" id="rir-'+e.id+'-'+k+'" data-f="rir" data-ex="'+e.id+'" data-k="'+k+'" aria-label="RIR serie '+(k+1)+'" value="'+fmt(s.rir)+'" placeholder="'+(wk===1?3:e.rir[k])+'">';
     });
     h+='</div><div class="row between"><button type="button" class="btn" data-rest="'+e.rest+'">Descanso '+Math.floor(e.rest/60)+':'+String(e.rest%60).padStart(2,"0")+'</button>'+
-       '<details data-demo="'+e.id+'"><summary>Cómo hacerlo</summary><div class="demo"><img alt="Demostración de '+esc(e.n)+': posición inicial y final" width="400" height="300"><div class="sub demoMsg"></div></div><ul>'+e.cues.map(function(c){return '<li>'+esc(c)+'</li>';}).join("")+'</ul>'+(FOTO_APROX[e.id]?'<p class="sub" style="margin:6px 0 0">'+esc(FOTO_APROX[e.id])+'</p>':'')+'</details></div></section>';
+       '<details data-demo="'+e.id+'"><summary>Cómo hacerlo</summary><div class="demo"><img alt="Demostración de '+esc(e.n)+': posición inicial y final" width="400" height="300"><div class="sub demoMsg"></div></div><ul>'+e.cues.map(function(c){return '<li>'+esc(c)+'</li>';}).join("")+'</ul>'+'<p class="sub demoNote" style="margin:6px 0 0"></p></details></div></section>';
   });
   h+='<div class="card"><label class="sub" for="nota">Notas de la sesión (molestias, máquinas ocupadas, cómo te sentiste)</label><textarea id="nota">'+esc(draft.nota||"")+'</textarea></div>';
   $("view").innerHTML=h;updCount();
@@ -433,7 +433,7 @@ view.addEventListener("click",function(ev){
   var t=ev.target.closest("button");if(!t)return;
   if(t.dataset.day){flushNow();ui.day=t.dataset.day;render();window.scrollTo(0,0);}
   else if(t.dataset.var){var e=findEx(t.dataset.ex);exState(e).variante=t.dataset.var;queueSave();
-    t.parentNode.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(b===t));});}
+    t.parentNode.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(b===t));});paintDemos();}
   else if(t.dataset.rest){startTimer(+t.dataset.rest);}
   else if(t.id==="bSave"){saveBody();}
   else if(t.id==="wPrev"){ui.week=addDays(ui.week,-7);render();}
@@ -458,9 +458,15 @@ function saveBody(){
 var demoFrame=0;
 function paintDemos(){
   document.querySelectorAll("details[data-demo][open]").forEach(function(d){
-    var img=d.querySelector("img"),msg=d.querySelector(".demoMsg"),f=window.FOTOS&&window.FOTOS[FOTO[d.dataset.demo]];
-    if(!f){img.style.display="none";msg.textContent="La foto no está disponible sin conexión todavía. Abre la app una vez con internet.";return;}
-    img.style.display="";img.src="data:image/jpeg;base64,"+f[demoFrame];msg.textContent=demoFrame?"Posición final":"Posición inicial";
+    var id=d.dataset.demo,img=d.querySelector("img"),msg=d.querySelector(".demoMsg"),note=d.querySelector(".demoNote");
+    var x=draft&&draft.ejercicios&&draft.ejercicios[id],v=(x&&x.variante)||"A",i="ABC".indexOf(v),list=FOTO[id]||[];
+    var key=list[i],shown=v,extra="";
+    if(!key){var alt=[0,2,1].filter(function(j){return list[j];})[0];if(alt!=null){key=list[alt];shown="ABC"[alt];extra="No hay foto de la variante "+v+". Se muestra la variante "+shown+": el recorrido es el mismo.";}}
+    var f=key&&window.FOTOS&&window.FOTOS[key];
+    if(!f){img.style.display="none";msg.textContent=window.FOTOS?"No hay foto de esta variante.":"La foto todavía no se descarga. Abre la app una vez con internet.";note.textContent="";return;}
+    img.style.display="";img.src="data:image/jpeg;base64,"+f[demoFrame];
+    msg.textContent="Variante "+shown+" · "+(demoFrame?"posición final":"posición inicial");
+    note.textContent=extra||FOTO_NOTA[id+"-"+v]||"";
   });
 }
 view.addEventListener("toggle",function(ev){if(ev.target.matches&&ev.target.matches("details[data-demo]"))paintDemos();},true);
