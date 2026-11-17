@@ -1,5 +1,5 @@
 /* Guarda la app para usarla sin conexion. Sube el numero de version al publicar cambios. */
-const CACHE = "entreno-v1";
+const CACHE = "entreno-v2";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));

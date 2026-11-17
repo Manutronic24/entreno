@@ -57,6 +57,8 @@ button{cursor:pointer}
 .between{justify-content:space-between}
 .note{border-radius:10px;padding:10px 12px;font-size:14px}
 .note.info{background:var(--accent-soft)}
+.note.plain{background:var(--bg);color:var(--muted)}
+.warm{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
 .note.warn{background:var(--warn-soft);color:var(--warn)}
 .pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600}
 .pill.good{background:var(--good-soft);color:var(--good)}
@@ -165,6 +167,25 @@ var PROG = {
   E("vie7","Elevaciones laterales en polea","Hombro",2,12,20,[1,0],75,["Polea baja","Máquina","Mancuernas"],["Mismo peso del lunes","Hasta la altura del hombro","Sin impulso"])
  ]}
 };
+var WARM = {
+ lun:["5 min de caminadora inclinada o bicicleta, a ritmo de plática","10 círculos de hombro hacia adelante y 10 hacia atrás, por lado","15 jalones a la cara con polea muy ligera"],
+ mar:["5 min de bicicleta, a ritmo de plática","10 sentadillas sin peso, bajando en 3 segundos","10 balanceos de pierna al frente, por lado"],
+ mie:["5 min de bicicleta o elíptica con brazos, a ritmo de plática","10 círculos de hombro hacia adelante y 10 hacia atrás, por lado","15 flexiones y extensiones de codo sin peso"],
+ jue:["5 min de caminadora inclinada, a ritmo de plática","10 bisagras de cadera sin peso (cadera atrás, espalda recta)","10 puentes de glúteo en el piso"],
+ vie:["5 min de elíptica o remo, a ritmo de plática","10 círculos de hombro hacia adelante y 10 hacia atrás, por lado","15 jalones a la cara con polea muy ligera"]
+};
+/* Series de aproximación: [porcentaje del peso de trabajo, repeticiones] */
+var AP_FULL=[[50,8],[70,4],[85,2]], AP_MID=[[50,8],[75,4]], AP_ONE=[[60,6]];
+var AP = {lun1:AP_FULL,lun2:AP_ONE, mar1:AP_FULL,mar2:AP_ONE, mie1:AP_MID,mie2:AP_FULL, jue1:AP_FULL,jue2:AP_ONE, vie1:AP_FULL,vie2:AP_ONE};
+function apText(e,base){
+  var a=AP[e.id];if(!a)return "Sin series de aproximación: ya vienes caliente. Empieza directo con la serie 1.";
+  var t=a.map(function(p){
+    if(base!=null&&base>0){var kg=Math.max(0,Math.round(base*p[0]/100/2.5)*2.5);return fmt(kg)+" kg × "+p[1];}
+    return p[0]+" % × "+p[1];
+  }).join("  ·  ");
+  return "Aproximación (no se registra): "+t+(base!=null&&base>0?"":" · del peso de tu serie 1");
+}
+function apBase(x,last){var k=x.series[0]&&x.series[0].kg;if(k!=null)return k;return last&&last.sets[0]?last.sets[0].kg:null;}
 var DAYS = ["lun","mar","mie","jue","vie"];
 var ALL_EX = []; DAYS.forEach(function(d){PROG[d].ex.forEach(function(e){ALL_EX.push({d:d,e:e});});});
 var PLANNED = ALL_EX.reduce(function(a,x){return a+x.e.s;},0);
@@ -267,6 +288,7 @@ function viewHoy(){
   h+='<div class="chips" role="group" aria-label="Día de la rutina">'+DAYS.map(function(d){return '<button type="button" class="chip" data-day="'+d+'" aria-pressed="'+(d===ui.day)+'">'+PROG[d].label+'</button>';}).join("")+'</div>';
   h+='<div class="card"><div class="row between"><h2>'+esc(p.t)+'</h2><span class="pill idle" id="count"></span></div>'+
      '<label class="sub" for="fecha">Fecha de la sesión</label><input type="date" id="fecha" value="'+ui.date+'"></div>';
+  h+='<div class="card"><h3>Calentamiento · 8 a 10 minutos</h3><ol class="warm">'+WARM[ui.day].map(function(w){return '<li>'+esc(w)+'</li>';}).join("")+'</ol><div class="sub">Después haz las series de aproximación que marca cada ejercicio. Son ligeras: no deben cansarte ni se anotan.</div></div>';
   if(wk===1)h+='<div class="note info">Semana 1: todas las series a RIR 3. Hoy se calibran pesos.</div>';
   else if(wk===6)h+='<div class="note warn">Semana 6: descarga. Mismos pesos, la mitad de las series, todo a RIR 4.</div>';
   p.ex.forEach(function(e,i){
@@ -276,6 +298,7 @@ function viewHoy(){
        '<div class="chips" role="group" aria-label="Variante usada">'+["A","B","C"].map(function(v,j){return '<button type="button" class="chip sm" data-var="'+v+'" data-ex="'+e.id+'" aria-pressed="'+(x.variante===v)+'">'+v+': '+esc(e.alts[j])+'</button>';}).join("")+'</div>'+
        '<div class="last">'+(last?'Última vez ('+shortD(last.fecha)+', '+last.variante+'): '+esc(setsText(last.sets)):'Sin registro previo')+'</div>'+
        '<div><span class="pill '+ad.c+'">'+esc(ad.t)+'</span></div>'+
+       '<div class="note '+(AP[e.id]?"warn":"plain")+'" id="ap-'+e.id+'">'+esc(apText(e,apBase(x,last)))+'</div>'+
        '<div class="sets"><span></span><span class="h">kg</span><span class="h">Reps</span><span class="h">RIR</span>';
     x.series.slice(0,e.s).forEach(function(s,k){
       var ph=last&&last.sets[k]?last.sets[k]:null;
@@ -379,7 +402,8 @@ function route(){var h=(location.hash||"#hoy").slice(1);ui.view=["hoy","progreso
 var view=$("view");
 view.addEventListener("input",function(ev){
   var t=ev.target;
-  if(t.dataset.f){var e=findEx(t.dataset.ex),x=exState(e);x.series[+t.dataset.k][t.dataset.f]=num(t.value);updCount();queueSave();}
+  if(t.dataset.f){var e=findEx(t.dataset.ex),x=exState(e);x.series[+t.dataset.k][t.dataset.f]=num(t.value);updCount();queueSave();
+    if(t.dataset.f==="kg"&&t.dataset.k==="0"){var el=$("ap-"+e.id);if(el)el.textContent=apText(e,apBase(x,lastBefore(e.id,ui.date)));}}
   else if(t.id==="nota"){draft.nota=t.value;queueSave();}
 });
 view.addEventListener("change",function(ev){
