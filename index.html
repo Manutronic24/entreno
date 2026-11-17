@@ -168,11 +168,11 @@ var PROG = {
  ]}
 };
 var WARM = {
- lun:["5 min de caminadora inclinada o bicicleta, a ritmo de plática","10 círculos de hombro hacia adelante y 10 hacia atrás, por lado","15 jalones a la cara con polea muy ligera"],
- mar:["5 min de bicicleta, a ritmo de plática","10 sentadillas sin peso, bajando en 3 segundos","10 balanceos de pierna al frente, por lado"],
- mie:["5 min de bicicleta o elíptica con brazos, a ritmo de plática","10 círculos de hombro hacia adelante y 10 hacia atrás, por lado","15 flexiones y extensiones de codo sin peso"],
- jue:["5 min de caminadora inclinada, a ritmo de plática","10 bisagras de cadera sin peso (cadera atrás, espalda recta)","10 puentes de glúteo en el piso"],
- vie:["5 min de elíptica o remo, a ritmo de plática","10 círculos de hombro hacia adelante y 10 hacia atrás, por lado","15 jalones a la cara con polea muy ligera"]
+ lun:["10 círculos de hombro hacia adelante y 10 hacia atrás, por lado","15 jalones a la cara con polea muy ligera","1 serie muy ligera del press inclinado: 15 repeticiones con cerca del 30 % de tu peso"],
+ mar:["10 sentadillas sin peso, bajando en 3 segundos","10 balanceos de pierna al frente, por lado","1 serie muy ligera de hack squat: 15 repeticiones con la máquina casi vacía"],
+ mie:["10 círculos de hombro hacia adelante y 10 hacia atrás, por lado","15 flexiones y extensiones de codo sin peso","1 serie muy ligera de curl en polea: 15 repeticiones con cerca del 30 % de tu peso"],
+ jue:["10 bisagras de cadera sin peso (cadera atrás, espalda recta)","10 puentes de glúteo en el piso","1 serie muy ligera de peso muerto rumano: 15 repeticiones solo con la barra"],
+ vie:["10 círculos de hombro hacia adelante y 10 hacia atrás, por lado","15 jalones a la cara con polea muy ligera","1 serie muy ligera del press de pecho: 15 repeticiones con cerca del 30 % de tu peso"]
 };
 /* Series de aproximación: [porcentaje del peso de trabajo, repeticiones] */
 var AP_FULL=[[50,8],[70,4],[85,2]], AP_MID=[[50,8],[75,4]], AP_ONE=[[60,6]];
@@ -288,7 +288,7 @@ function viewHoy(){
   h+='<div class="chips" role="group" aria-label="Día de la rutina">'+DAYS.map(function(d){return '<button type="button" class="chip" data-day="'+d+'" aria-pressed="'+(d===ui.day)+'">'+PROG[d].label+'</button>';}).join("")+'</div>';
   h+='<div class="card"><div class="row between"><h2>'+esc(p.t)+'</h2><span class="pill idle" id="count"></span></div>'+
      '<label class="sub" for="fecha">Fecha de la sesión</label><input type="date" id="fecha" value="'+ui.date+'"></div>';
-  h+='<div class="card"><h3>Calentamiento · 8 a 10 minutos</h3><ol class="warm">'+WARM[ui.day].map(function(w){return '<li>'+esc(w)+'</li>';}).join("")+'</ol><div class="sub">Después haz las series de aproximación que marca cada ejercicio. Son ligeras: no deben cansarte ni se anotan.</div></div>';
+  h+='<div class="card"><h3>Calentamiento · 3 a 5 minutos</h3><ol class="warm">'+WARM[ui.day].map(function(w){return '<li>'+esc(w)+'</li>';}).join("")+'</ol><div class="sub">Después haz las series de aproximación que marca cada ejercicio. Son ligeras: no deben cansarte ni se anotan.</div></div>';
   if(wk===1)h+='<div class="note info">Semana 1: todas las series a RIR 3. Hoy se calibran pesos.</div>';
   else if(wk===6)h+='<div class="note warn">Semana 6: descarga. Mismos pesos, la mitad de las series, todo a RIR 4.</div>';
   p.ex.forEach(function(e,i){
